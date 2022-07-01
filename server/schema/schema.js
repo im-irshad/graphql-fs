@@ -1,4 +1,4 @@
-const { projects, clients } = require("../sampleData");
+// const { projects, clients } = require("../sampleData");
 const Project = require("../models/Project");
 const Client = require("../models/Client");
 
@@ -45,7 +45,7 @@ const RootQuery = new GraphQLObjectType({
     clients: {
       type: new GraphQLList(ClientType),
       resolve(parent, args) {
-        return clients;
+        return Client.find();
       },
     },
     client: {
