@@ -105,6 +105,53 @@ const Mutation = new GraphQLObjectType({
         return Client.findByIdAndDelete(args.id);
       },
     },
+
+    // add project
+
+    addProject: {
+      type: ProjectType,
+      args: {
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        status: { type: GraphQLString },
+        clientId: { type: GraphQLID },
+      },
+      resolve(parent, args) {
+        const project = new Project({
+          name: args.name,
+          description: args.description,
+          status: args.status,
+          clientId: args.clientId,
+        });
+        return project.save();
+      },
+    },
+
+    // delete project
+    deleteProject: {
+      type: ProjectType,
+      args: {
+        id: { type: GraphQLID },
+      },
+      resolve(parent, args) {
+        return Project.findByIdAndDelete(args.id);
+      },
+    },
+
+    // update project
+    updateProject: {
+      type: ProjectType,
+      args: {
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        status: { type: GraphQLString },
+        clientId: { type: GraphQLID },
+      },
+      resolve(parent, args) {
+        return Project.findByIdAndUpdate(args.id, args, { new: true });
+      }, // new: true will return the updated object
+    },
   },
 });
 
