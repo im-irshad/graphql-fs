@@ -1,16 +1,9 @@
 import { gql, useQuery } from "@apollo/client";
 import Table from "react-bootstrap/Table";
 import { MdDelete } from "react-icons/md";
-const GET_CLIENTS = gql`
-  query getClients {
-    clients {
-      id
-      name
-      email
-      phone
-    }
-  }
-`;
+import GET_CLIENTS from "../queries/clientQueries";
+import ClientRow from "./ClientRow";
+
 export default function Clients() {
   const { loading, error, data } = useQuery(GET_CLIENTS);
 
@@ -32,16 +25,7 @@ export default function Clients() {
           </thead>
           <tbody>
             {data.clients.map((client) => (
-              <tr key={client.id}>
-                <td>{client.id}</td>
-                <td>{client.name}</td>
-                <td>{client.email}</td>
-                <td>{client.phone}</td>
-                <td>
-                  {" "}
-                  <MdDelete />{" "}
-                </td>
-              </tr>
+              <ClientRow key={client.id} client={client} />
             ))}
           </tbody>
         </Table>
