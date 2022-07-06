@@ -1,7 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import Table from "react-bootstrap/Table";
 import { MdDelete } from "react-icons/md";
-import GET_CLIENTS from "../queries/clientQueries";
+import { GET_CLIENTS } from "../queries/clientQueries";
 import ClientRow from "./ClientRow";
 
 export default function Clients() {

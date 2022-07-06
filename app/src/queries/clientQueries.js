@@ -1,6 +1,6 @@
 const { gql } = require("@apollo/client");
 
-const GET_CLIENTS = gql`
+export const GET_CLIENTS = gql`
   query getClients {
     clients {
       id
@@ -10,5 +10,3 @@ const GET_CLIENTS = gql`
     }
   }
 `;
-
-export default GET_CLIENTS;
