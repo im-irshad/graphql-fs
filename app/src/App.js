@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Header from "./components/Header";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Clients from "./components/Clients";
+import AddClient from "./components/AddClient";
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
@@ -15,6 +16,7 @@ function App() {
       <ApolloProvider client={client}>
         <Container className="p-3">
           <Header />
+          <AddClient />
           <Clients />
         </Container>
       </ApolloProvider>
