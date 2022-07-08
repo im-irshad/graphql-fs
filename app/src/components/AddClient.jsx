@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { useMutation } from "@apollo/client";
+import { ADD_CLIENT } from "../mutations/clientMutations";
+import { GET_CLIENTS } from "../queries/clientQueries";
 
 export default function AddClient() {
   const [show, setShow] = useState(false);
@@ -10,6 +13,17 @@ export default function AddClient() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(name, email, phone);
+    AddClient({ name, email, phone });
+    setShow(false);
+  };
+
+  const [AddClient] = useMutation(ADD_CLIENT, {
+    variables: { name, email, phone },
+    refetchQueries: [{ query: GET_CLIENTS }],
+  });
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
@@ -21,7 +35,7 @@ export default function AddClient() {
           <Modal.Title>Add New Client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Name:</Form.Label>
               <Form.Control
