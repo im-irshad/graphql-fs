@@ -6,6 +6,8 @@ import Clients from "./components/Clients";
 import AddClient from "./components/AddClient";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
+import Project from "./pages/Project";
 
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
@@ -21,6 +23,8 @@ function App() {
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/projects/:id" element={<Project />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
         </Container>
