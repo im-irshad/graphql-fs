@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ADD_PROJECT } from "../mutations/projectMutations";
+import { GET_CLIENTS } from "../queries/clientQueries";
 import { GET_PROJECT, GET_PROJECTS } from "../queries/projectQueries";
 
 export default function AddProject() {
@@ -11,7 +12,8 @@ export default function AddProject() {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [client, setClient] = useState("");
-
+  const { loading, error, data } = useQuery(GET_CLIENTS);
+  console.log(data);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleSubmit = (e) => {
@@ -21,72 +23,86 @@ export default function AddProject() {
     setShow(false);
   };
 
-  const [AddProject] = useMutation(ADD_Project, {
+  const [AddProject] = useMutation(ADD_PROJECT, {
     variables: { name, description, status, client },
     refetchQueries: [{ query: GET_PROJECTS }],
   });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Add New Client
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Project</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Name"
-                id="name"
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
-              <Form.Label>Description:</Form.Label>
-              <Form.Control
-                type="text area"
-                placeholder="Enter Description"
-                id="description"
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              />
-              <Form.Label>Status:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Status"
-                id="status"
-                onChange={(e) => {
-                  setStatus(e.target.value);
-                }}
-              />
-              <Form.Label>Client:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Choose Client"
-                id="client"
-                onChange={(e) => {
-                  setClient(e.target.value);
-                }}
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
+      {!loading && !error && (
+        <>
+          <Button variant="secondary" onClick={handleShow}>
+            Add New Project
           </Button>
-        </Modal.Footer>
-      </Modal>
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add New Project</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Name:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Name"
+                    id="name"
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                  />
+                  <Form.Label>Description:</Form.Label>
+                  <Form.Control
+                    type="text area"
+                    placeholder="Enter Description"
+                    id="description"
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                    }}
+                  />
+                  <Form.Label>Status:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Status"
+                    id="status"
+                    onChange={(e) => {
+                      setStatus(e.target.value);
+                    }}
+                  />
+                  <Form.Label>Client:</Form.Label>
+                  <Form.Select
+                    type="select"
+                    id="client"
+                    onChange={(e) => {
+                      setClient(e.target.value);
+                    }}
+                  >
+                    <option>Select Client</option>
+                    {data.clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </>
+      )}
     </>
   );
 }
