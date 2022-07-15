@@ -20,11 +20,16 @@ export default function AddProject() {
     e.preventDefault();
     console.log(name, description, status, client);
     AddProject({ name, description, status, client });
+    setName("");
+    setDescription("");
+    setStatus("");
+    setClient("");
+
     setShow(false);
   };
 
   const [AddProject] = useMutation(ADD_PROJECT, {
-    variables: { name, description, status, client },
+    variables: { name, description, status, clientId: client },
     refetchQueries: [{ query: GET_PROJECTS }],
   });
 

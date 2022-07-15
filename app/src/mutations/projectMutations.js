@@ -5,7 +5,7 @@ export const ADD_PROJECT = gql`
     $name: String!
     $description: String!
     $status: String!
-    $client: String!
+    $client: ID!
   ) {
     addProject(
       name: $name
@@ -17,7 +17,12 @@ export const ADD_PROJECT = gql`
       name
       description
       status
-      client
+      client {
+        id
+        name
+        email
+        phone
+      }
     }
   }
 `;
