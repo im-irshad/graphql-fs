@@ -1,22 +1,34 @@
-import React from "react";
-import { useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
+import Table from "react-bootstrap/Table";
+import { MdDelete } from "react-icons/md";
 import { GET_PROJECTS } from "../queries/projectQueries";
+import ProjectRow from "./ProjectRow";
 
 export default function Projects() {
   const { loading, error, data } = useQuery(GET_PROJECTS);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
+
   return (
     <div>
       {!loading && !error && (
-        <div>
-          {data.projects.map((project) => (
-            <div key={project.id}>
-              <h3>{project.name}</h3>
-              <p>{project.description}</p>
-            </div>
-          ))}
-        </div>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Client</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.projects.map((project) => (
+              <ProjectRow key={project.id} project={project} />
+            ))}
+          </tbody>
+        </Table>
       )}
     </div>
   );
