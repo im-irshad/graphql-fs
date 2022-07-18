@@ -19,7 +19,7 @@ export default function AddProject() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(name, description, status, client);
-    AddProject({ name, description, status, client });
+    addProject(name, description, status, client);
     setName("");
     setDescription("");
     setStatus("");
@@ -28,7 +28,7 @@ export default function AddProject() {
     setShow(false);
   };
 
-  const [AddProject] = useMutation(ADD_PROJECT, {
+  const [addProject] = useMutation(ADD_PROJECT, {
     variables: { name, description, status, clientId: client },
     refetchQueries: [{ query: GET_PROJECTS }],
   });
